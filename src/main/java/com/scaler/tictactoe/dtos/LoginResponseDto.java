@@ -9,4 +9,12 @@ import lombok.Setter;
 @Setter
 public class LoginResponseDto {
     private ResponseStatus status;
+
+    public ResponseStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(ResponseStatus status) {
+        this.status = status;
+    }
 }

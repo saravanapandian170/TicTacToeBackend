@@ -5,7 +5,7 @@ import jakarta.persistence.Transient;
 import lombok.*;
 
 @Data
-@Entity
+@Entity(name = "boards")
 @Getter
 @Setter
 @NoArgsConstructor

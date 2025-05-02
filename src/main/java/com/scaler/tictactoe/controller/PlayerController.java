@@ -7,6 +7,7 @@ import com.scaler.tictactoe.service.GameServiceImpl;
 import com.scaler.tictactoe.service.PlayerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.parameters.P;
@@ -18,6 +19,8 @@ import jakarta.validation.Valid;
 public class PlayerController {
     private PlayerService playerService;
     private static final Logger log = LoggerFactory.getLogger(PlayerController.class);
+
+    @Autowired
     public PlayerController(PlayerService playerService) {
         this.playerService = playerService;
     }

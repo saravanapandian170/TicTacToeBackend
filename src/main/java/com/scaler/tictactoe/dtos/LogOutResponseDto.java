@@ -8,4 +8,12 @@ import org.hibernate.annotations.SecondaryRow;
 @Setter
 public class LogOutResponseDto {
     private ResponseStatus status;
+
+    public ResponseStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(ResponseStatus status) {
+        this.status = status;
+    }
 }
