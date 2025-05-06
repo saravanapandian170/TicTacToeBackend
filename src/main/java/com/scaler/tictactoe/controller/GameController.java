@@ -28,7 +28,7 @@ public class GameController {
     public ResponseEntity<CreateGameResponseDto> createGame(@Valid @RequestBody CreateGameRequestDto requestDto) {
         CreateGameResponseDto responseDto = new CreateGameResponseDto();
         try{
-            Game game = this.gameService.createGame(requestDto.getPlayers());
+            Game game = this.gameService.createGame(requestDto.getPlayerDtos());
             responseDto.setGame(game);
             responseDto.setStatus(ResponseStatus.SUCCESS);
             return ResponseEntity.ok(responseDto);

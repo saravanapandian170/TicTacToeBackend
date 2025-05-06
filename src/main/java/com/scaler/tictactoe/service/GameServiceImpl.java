@@ -1,37 +1,45 @@
 package com.scaler.tictactoe.service;
 
+import com.scaler.tictactoe.dtos.PlayerDto;
 import com.scaler.tictactoe.exceptions.*;
 import com.scaler.tictactoe.model.*;
 import com.scaler.tictactoe.repository.GameRepository;
 import com.scaler.tictactoe.repository.PlayerRepository;
+import com.scaler.tictactoe.repository.SymbolRepository;
 import com.scaler.tictactoe.strategy.WinningStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class GameServiceImpl implements GameService {
     private GameRepository gameRepository;
     private PlayerRepository playerRepository;
+    private SymbolRepository symbolRepository;
     private List<WinningStrategy> strategies;
     private static final Logger log = LoggerFactory.getLogger(GameServiceImpl.class);
     @Autowired
     public GameServiceImpl(GameRepository gameRepository, PlayerRepository playerRepository,
-                           List<WinningStrategy> strategies) {
+                           SymbolRepository symbolRepository, List<WinningStrategy> strategies) {
         this.gameRepository = gameRepository;
         this.playerRepository = playerRepository;
+        this.symbolRepository = symbolRepository;
         this.strategies = strategies;
     }
 
     @Override
-    public Game createGame(List<Player> players) {
-        if (players == null || players.size() < 2) {
+    public Game createGame(List<PlayerDto> playerDtos) throws PlayerNotFoundException{
+        if (playerDtos == null || playerDtos.size() < 2) {
             throw new IllegalArgumentException("At least 2 players required to create a game.");
         }
-        Board newBoard = createBoard(players.size() + 1);
+        Board newBoard = createBoard(playerDtos.size() + 1);
+        List<Player> players = getPlayerList(playerDtos);
+
         int nextPlayerIdx = 0;
         Game newGame = new Game();
         newGame.setGameState(GameState.IN_PROGRESS);
@@ -120,6 +128,23 @@ public class GameServiceImpl implements GameService {
         game.setGameState(GameState.IN_PROGRESS);
 
         this.gameRepository.save(game);
+    }
+
+    @Override
+    public List<Player> getPlayerList(List<PlayerDto> playerDtos) throws PlayerNotFoundException {
+        List<Player> list = new ArrayList<>();
+        for(PlayerDto playerDto : playerDtos) {
+            Human player = this.playerRepository.findById(playerDto.getId()).orElseThrow(() -> new PlayerNotFoundException("Player not found"));
+            player.setSymbol(symbol(playerDto.getSymbolChar()));
+            list.add(player);
+        }
+        return list;
+    }
+
+    @Override
+    public Symbol symbol(char symbolChar) {
+        return this.symbolRepository.findBySymbol(symbolChar)
+                .orElseGet(() -> this.symbolRepository.save(new Symbol(symbolChar)));
     }
 
     private void populateBoard(Board gameBoard) {

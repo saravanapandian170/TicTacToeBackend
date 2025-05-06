@@ -15,13 +15,13 @@ import java.util.List;
 public class CreateGameRequestDto {
     @NotNull(message = "Players list cannot be null")
     @NotEmpty(message = "There must be at least one player")
-    private List<Player> players;
+    private List<PlayerDto> players;
 
-    public List<Player> getPlayers() {
+    public List<PlayerDto> getPlayerDtos() {
         return players;
     }
 
-    public void setPlayers(List<Player> players) {
+    public void setPlayers(List<PlayerDto> players) {
         this.players = players;
     }
 }

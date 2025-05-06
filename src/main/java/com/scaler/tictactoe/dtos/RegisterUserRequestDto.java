@@ -16,6 +16,15 @@ public class RegisterUserRequestDto {
     @NotEmpty(message = "Enter Password")
     private String password;
 
+    public RegisterUserRequestDto() {
+    }
+
+    public RegisterUserRequestDto(String username, String email, String password) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+    }
+
     public String getUsername() {
         return username;
     }
